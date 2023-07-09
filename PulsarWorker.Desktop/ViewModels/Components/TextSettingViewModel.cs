@@ -14,6 +14,7 @@ public sealed class TextSettingViewModel : ViewModelBase
         _onTextSettingChanged = onTextSettingChanged;
         this.WhenAnyValue(static x => x.Text)
             .Throttle(TimeSpan.FromMilliseconds(300))
+            .Skip(1)
             .Subscribe(async x => { await _onTextSettingChanged(Name, x); });
     }
 

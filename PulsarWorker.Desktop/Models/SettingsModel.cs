@@ -80,11 +80,8 @@ public sealed class SettingsModel
         string? value,
         Func<Task> onSuccess)
     {
-        var multipleChoiceSettingViewModel = new MultipleChoiceSettingViewModel(requestedKey, availableChoices,
-            async (key, newValue) => await HandleChangedSetting(key, newValue, onSuccess))
-        {
-            CurrentChoice = value ?? "Default",
-        };
+        var multipleChoiceSettingViewModel = new MultipleChoiceSettingViewModel(requestedKey, availableChoices, value ?? "Default",
+            async (key, newValue) => await HandleChangedSetting(key, newValue, onSuccess));
 
         return new()
         {
