@@ -8,7 +8,8 @@ namespace PulsarWorker.Desktop.ViewModels.Components;
 public sealed class MultipleChoiceSettingViewModel : ViewModelBase
 {
     private readonly Func<string, string?, Task> _onChoiceChanged;
-    public MultipleChoiceSettingViewModel(string name, IEnumerable<string> choices, string initialValue, Func<string, string?, Task> onChoiceChanged)
+    public MultipleChoiceSettingViewModel(string name, IEnumerable<string> choices, string initialValue,
+        Func<string, string?, Task> onChoiceChanged)
     {
         Name = name;
         Choices = choices;
@@ -23,8 +24,11 @@ public sealed class MultipleChoiceSettingViewModel : ViewModelBase
         get => _currentChoice;
         set
         {
-            this.RaiseAndSetIfChanged(ref _currentChoice, value);
-            _onChoiceChanged(Name, value);
+            if (_currentChoice != value)
+            {
+                this.RaiseAndSetIfChanged(ref _currentChoice, value);
+                _onChoiceChanged(Name, value);
+            }
         }
     }
 

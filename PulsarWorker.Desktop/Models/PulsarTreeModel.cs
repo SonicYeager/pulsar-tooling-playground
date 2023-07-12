@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Avalonia.Controls.Notifications;
 using PulsarWorker.Client;
 using PulsarWorker.Desktop.Services;
 using PulsarWorker.Desktop.ViewModels.Components;
@@ -26,10 +27,19 @@ public sealed class PulsarTreeModel
         };
     }
 
-    public async Task GetPulsarNodeTree(ObservableCollection<PulsarNodeViewModel> collection)
+    public async Task GetPulsarNodeTree(ObservableCollection<PulsarNodeViewModel> collection,
+        Action<string, NotificationType, string> onNotify)
     {
-        var mainNode = await GetClusterNode("standalone", n => collection.Remove(n));
-        collection.Add(mainNode);
+        try
+        {
+            var mainNode = await GetClusterNode("standalone", n => collection.Remove(n));
+            collection.Add(mainNode);
+        }
+        catch (Exception e)
+        {
+            onNotify("Error", NotificationType.Error, e.Message);
+            //TODO show error page upon exception -> use event
+        }
     }
 
     private async Task<PulsarNodeViewModel> GetClusterNode(string cluster, Action<PulsarNodeViewModel> removeSelf)

@@ -18,6 +18,7 @@ public sealed class PulsarClient : IPulsarClient
         _client?.Dispose();
         _client ??= _httpClientFactory.GetHttpClient(newBaseAddress);
     }
+
     public async Task<IEnumerable<string>?> GetClusters()
     {
         return await GetResourcesAsync(new("/admin/v2/clusters", UriKind.Relative));
@@ -40,20 +41,12 @@ public sealed class PulsarClient : IPulsarClient
 
     public async Task<HttpResponseMessage> DeleteTopic(string tenant, string pulsarNamespace, string topic)
     {
-        return await _client.DeleteAsync(new Uri($"/persistent/{tenant}/{pulsarNamespace}/{topic}", UriKind.Relative));
+        return await _client!.DeleteAsync(new Uri($"/persistent/{tenant}/{pulsarNamespace}/{topic}", UriKind.Relative));
     }
 
     private async Task<IEnumerable<string>?> GetResourcesAsync(Uri uri)
     {
-        try
-        {
-            return await _client.GetFromJsonAsync<IEnumerable<string>>(uri);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return null;
-        }
+        return await _client!.GetFromJsonAsync<IEnumerable<string>>(uri);
     }
 
     public void Dispose()

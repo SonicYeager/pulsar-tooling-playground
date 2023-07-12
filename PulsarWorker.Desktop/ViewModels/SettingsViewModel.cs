@@ -23,9 +23,9 @@ public sealed class SettingsViewModel : ViewModelBase
         _userManager = userManager;
     }
 
-    public async Task LoadAsync()
+    public async Task LoadAsync() //TODO look into the approach of the music store example for loading
     {
-        await _model.GetPersistedSettings(PersistedOptions, async () => await Notify(), _userManager.CurrentUserId); // userId 1 is the test user predefined by the database project
+        await _model.GetPersistedSettings(PersistedOptions, async () => await Notify(), _userManager.CurrentUserId);
     }
 
 

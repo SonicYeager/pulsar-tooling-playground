@@ -11,6 +11,7 @@ using Avalonia.Styling;
 using Microsoft.Extensions.Configuration;
 using PulsarWorker.Client;
 using PulsarWorker.Data.AutoMapper;
+using PulsarWorker.Database.Context;
 using PulsarWorker.Database.Extensions;
 using PulsarWorker.Desktop.Models;
 using PulsarWorker.Desktop.Services;
@@ -32,6 +33,9 @@ namespace PulsarWorker.Desktop
             RegisterDatabase();
             RegisterServices();
             BuildServiceProvider();
+
+            var context = ServiceProvider.GetRequiredService<PulsarWorkerDbContext>();
+            context.Database.EnsureCreated();
 
             AvaloniaXamlLoader.Load(this);
             DataTemplates.Add(new ViewLocator(ServiceProvider));
