@@ -9,9 +9,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDatabase(this IServiceCollection service, string connectionString)
     {
         return service
-            .AddSingleton<DbContextOptions<PulsarWorkerDbContext>>(static _ => new DbContextOptionsBuilder<PulsarWorkerDbContext>()
-                .UseInMemoryDatabase(nameof(PulsarWorkerDbContext))
-                //.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+            .AddSingleton<DbContextOptions<PulsarWorkerDbContext>>(_ => new DbContextOptionsBuilder<PulsarWorkerDbContext>()
+                .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
                 .Options);
     }
 }
