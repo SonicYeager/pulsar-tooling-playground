@@ -18,29 +18,21 @@
                        FontWeight="Bold"
                        Margin="0,0,0,5" />
 
-            <TreeView ItemsSource="{Binding Nodes}"
-                      Width="400"
-                      HorizontalAlignment="Stretch"
-                      Margin="0,5,0,0">
-                <TreeView.ItemTemplate>
-                    <TreeDataTemplate ItemsSource="{Binding SubNodes}">
-                        <TextBlock Text="{Binding Name}" />
-                    </TreeDataTemplate>
-                </TreeView.ItemTemplate>
-            </TreeView>
+            <!-- TODO add cluster node list -->
+            <ItemsControl ItemsSource="{Binding Clusters}"/>
 
         </StackPanel>
 
         <StackPanel Grid.Column="1"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
-            <TextBlock Text="Detail Page coming soon..."
+            <TextBlock Text="Metrics Page coming soon..."
                        FontSize="16"
                        FontWeight="Bold"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Margin="10" />
-            <!-- Add InspectionPanel (detail page for selected node (incl interactions)) -->
+            <!-- TODO add metrics via LiveCharts2 -->
         </StackPanel>
     </Grid>
 

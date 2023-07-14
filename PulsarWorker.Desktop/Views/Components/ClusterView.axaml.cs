@@ -1,14 +1,14 @@
 ﻿using System.Reactive.Disposables;
-using Avalonia.Controls;
 using Avalonia.ReactiveUI;
 using PulsarWorker.Desktop.ViewModels;
+using PulsarWorker.Desktop.ViewModels.Components;
 using ReactiveUI;
 
-namespace PulsarWorker.Desktop.Views;
+namespace PulsarWorker.Desktop.Views.Components;
 
-public sealed partial class PulsarApiView : ReactiveUserControl<ViewModelBase>
+public sealed partial class ClusterView : ReactiveUserControl<ViewModelBase>
 {
-    public PulsarApiView()
+    public ClusterView()
     {
         InitializeComponent();
         this.WhenActivated(disposables =>

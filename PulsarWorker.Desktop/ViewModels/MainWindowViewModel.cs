@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
-using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
-using PulsarWorker.Desktop.Views;
 using ReactiveUI;
 
 namespace PulsarWorker.Desktop.ViewModels;
@@ -43,10 +41,9 @@ public sealed class MainWindowViewModel : ViewModelBase
             await settingsViewModel.LoadAsync();
             Content = settingsViewModel;
         });
-        ShowApi = ReactiveCommand.Create(async () =>
+        ShowApi = ReactiveCommand.Create(() =>
         {
             var pulsarApiViewModel = _serviceProvider.GetRequiredService<PulsarApiViewModel>();
-            await pulsarApiViewModel.LoadAsync();
             Content = pulsarApiViewModel;
         });
 

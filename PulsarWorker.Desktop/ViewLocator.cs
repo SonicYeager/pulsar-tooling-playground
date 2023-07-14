@@ -3,8 +3,6 @@ using Avalonia.Controls.Templates;
 using Microsoft.Extensions.DependencyInjection;
 using PulsarWorker.Desktop.ViewModels;
 using System;
-using Avalonia.Media;
-using Avalonia.Styling;
 
 namespace PulsarWorker.Desktop;
 
