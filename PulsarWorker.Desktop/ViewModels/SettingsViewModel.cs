@@ -34,9 +34,9 @@ public sealed class SettingsViewModel : ViewModelBase
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
             ManagedNotificationManager ??= _provider.GetRequiredService<IManagedNotificationManager>();
-            ManagedNotificationManager?.Show(new Notification("Settings Saved", "", NotificationType.Success));
+            ManagedNotificationManager?.Show(new Notification("SettingsView Saved", "", NotificationType.Success));
         }).GetTask();
     }
 
-    public ObservableCollection<object> PersistedOptions { get; init; } = new();
+    public ObservableCollection<ViewModelBase> PersistedOptions { get; init; } = new();
 }

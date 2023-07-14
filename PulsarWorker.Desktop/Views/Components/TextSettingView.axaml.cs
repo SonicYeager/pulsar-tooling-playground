@@ -2,9 +2,9 @@
 
 namespace PulsarWorker.Desktop.Views.Components;
 
-public sealed partial class TextSetting : UserControl
+public sealed partial class TextSettingView : UserControl
 {
-    public TextSetting()
+    public TextSettingView()
     {
         InitializeComponent();
     }

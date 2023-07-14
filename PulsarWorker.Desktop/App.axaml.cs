@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using PulsarWorker.Desktop.ViewModels;
 using PulsarWorker.Desktop.Views;
 using System;
-using System.Net.Http;
 using Avalonia.Controls.Notifications;
 using Avalonia.Styling;
 using Microsoft.Extensions.Configuration;
@@ -15,8 +14,9 @@ using PulsarWorker.Database.Context;
 using PulsarWorker.Database.Extensions;
 using PulsarWorker.Desktop.Models;
 using PulsarWorker.Desktop.Services;
-using PulsarApi = PulsarWorker.Desktop.Views.PulsarApi;
+using PulsarWorker.Desktop.Views.Components;
 
+//TODO: introduce real async loading of data (when possible)
 namespace PulsarWorker.Desktop
 {
     public sealed class App : Application
@@ -60,14 +60,10 @@ namespace PulsarWorker.Desktop
             Services.AddTransient<MainWindowViewModel>();
             Services.AddTransient<PulsarApiViewModel>();
             Services.AddTransient<SettingsViewModel>();
-            Services.AddTransient<Settings>(_ => new()
-            {
-                DataContext = ServiceProvider.GetRequiredService<SettingsViewModel>(),
-            });
-            Services.AddTransient<PulsarApi>(_ => new()
-            {
-                DataContext = ServiceProvider.GetRequiredService<PulsarApiViewModel>(),
-            });
+            Services.AddTransient<MultipleChoiceSettingView>();
+            Services.AddTransient<TextSettingView>();
+            Services.AddTransient<SettingsView>();
+            Services.AddTransient<PulsarApiView>();
             Services.AddSingleton<SettingsManager>();
             Services.AddSingleton<UserManager>();
             Services.AddSingleton<MainWindow>(_ => new()

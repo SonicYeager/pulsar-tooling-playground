@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:PulsarWorker.Desktop.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="PulsarWorker.Desktop.Views.Settings">
+             x:Class="PulsarWorker.Desktop.Views.SettingsView">
 
     <UserControl.Styles>
         <Style Selector="TextBlock"> <!-- Defined style globally -->
@@ -20,7 +20,7 @@
 
     <DockPanel LastChildFill="False">
         <StackPanel DockPanel.Dock="Left">
-            <TextBlock Text="Settings" />
+            <TextBlock Text="SettingsView" />
             <ItemsControl ItemsSource="{Binding PersistedOptions}"
                            Width="400"
                            HorizontalAlignment="Stretch"

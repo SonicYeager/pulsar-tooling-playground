@@ -3,9 +3,9 @@ using Avalonia.Markup.Xaml;
 
 namespace PulsarWorker.Desktop.Views.Components;
 
-public partial class MultipleChoiceSetting : UserControl
+public sealed partial class MultipleChoiceSettingView : UserControl
 {
-    public MultipleChoiceSetting()
+    public MultipleChoiceSettingView()
     {
         InitializeComponent();
     }

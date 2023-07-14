@@ -3,6 +3,8 @@ using Avalonia.Controls.Templates;
 using Microsoft.Extensions.DependencyInjection;
 using PulsarWorker.Desktop.ViewModels;
 using System;
+using Avalonia.Media;
+using Avalonia.Styling;
 
 namespace PulsarWorker.Desktop;
 
@@ -13,18 +15,21 @@ public sealed class ViewLocator : IDataTemplate
     {
         _serviceProvider = serviceProvider;
     }
+
     public Control Build(object? data)
     {
         var name = data?.GetType().FullName!.Replace("ViewModel", "View");
         var type = Type.GetType(name);
 
-        if (type != null)
-            return (Control)_serviceProvider.GetRequiredService(type);
-
-        return new TextBlock
+        var fallbackValue = new TextBlock //TODO provide proper error view (unable to lead or find view xyz or so!)
         {
             Text = "Not Found: " + name,
         };
+
+        if (type != null)
+            return _serviceProvider.GetRequiredService(type) as Control ?? fallbackValue;
+
+        return fallbackValue;
     }
 
     public bool Match(object? data)

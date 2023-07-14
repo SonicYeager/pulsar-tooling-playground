@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:components="clr-namespace:PulsarWorker.Desktop.ViewModels.Components"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="PulsarWorker.Desktop.Views.Components.MultipleChoiceSetting">
+             x:Class="PulsarWorker.Desktop.Views.Components.MultipleChoiceSettingView">
     
     <Design.DataContext>
         <components:MultipleChoiceSettingViewModel />

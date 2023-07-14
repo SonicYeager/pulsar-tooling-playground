@@ -49,7 +49,7 @@
 						<PathIcon Margin="0,0,0,0"
 								  Data="{StaticResource SettingsIcon}">							
 						</PathIcon>
-						<TextBlock IsVisible="{Binding PaneState}">Settings</TextBlock>
+						<TextBlock IsVisible="{Binding PaneState}">SettingsView</TextBlock>
 						</StackPanel>
 					</Button>
 					<Button Name="ApiButton"

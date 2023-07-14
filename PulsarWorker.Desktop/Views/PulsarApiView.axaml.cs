@@ -2,9 +2,9 @@
 
 namespace PulsarWorker.Desktop.Views;
 
-public partial class Settings : UserControl
+public sealed partial class PulsarApiView : UserControl
 {
-    public Settings()
+    public PulsarApiView()
     {
         InitializeComponent();
     }

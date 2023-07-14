@@ -8,8 +8,8 @@ using PulsarWorker.Data.Entities;
 using PulsarWorker.Database.Context;
 using PulsarWorker.Database.Extensions;
 using PulsarWorker.Desktop.Services;
+using PulsarWorker.Desktop.ViewModels;
 using PulsarWorker.Desktop.ViewModels.Components;
-using PulsarWorker.Desktop.Views.Components;
 
 namespace PulsarWorker.Desktop.Models;
 
@@ -34,7 +34,7 @@ public sealed class SettingsModel
         };
     }
 
-    public async Task GetPersistedSettings(ObservableCollection<object> observableCollection, Func<Task> onSuccess, int userId)
+    public async Task GetPersistedSettings(ObservableCollection<ViewModelBase> observableCollection, Func<Task> onSuccess, int userId)
     {
         await using var context = Repository.Connect(_dbContextOptions);
         var settingsEntities = context.Set<SettingsEntity>().Where(s => s.UserId == userId);
@@ -58,35 +58,24 @@ public sealed class SettingsModel
         }
     }
 
-    private TextSetting CreateTextSetting(string requestedKey, string? value, Func<Task> onSuccess)
+    private TextSettingViewModel CreateTextSetting(string requestedKey, string? value, Func<Task> onSuccess)
     {
-        var textSettingViewModel =
-            new TextSettingViewModel(
-                requestedKey,
-                async (key, newValue) => await HandleChangedSetting(key, newValue, onSuccess))
-            {
-                Text = value,
-            };
-
-        return new()
+        return new(
+            requestedKey,
+            async (key, newValue) => await HandleChangedSetting(key, newValue, onSuccess))
         {
-            DataContext = textSettingViewModel,
+            Text = value,
         };
     }
 
-    private MultipleChoiceSetting CreateMultipleChoiceSetting(
+    private MultipleChoiceSettingViewModel CreateMultipleChoiceSetting(
         string requestedKey,
         IEnumerable<string> availableChoices,
         string? value,
         Func<Task> onSuccess)
     {
-        var multipleChoiceSettingViewModel = new MultipleChoiceSettingViewModel(requestedKey, availableChoices, value ?? "Default",
+        return new(requestedKey, availableChoices, value ?? "Default",
             async (key, newValue) => await HandleChangedSetting(key, newValue, onSuccess));
-
-        return new()
-        {
-            DataContext = multipleChoiceSettingViewModel,
-        };
     }
 
     private async Task HandleChangedSetting(string key, object? value, Func<Task> onSuccess, int userId = 1)

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
 using PulsarWorker.Client;
 using PulsarWorker.Desktop.Services;
+using PulsarWorker.Desktop.ViewModels;
 using PulsarWorker.Desktop.ViewModels.Components;
 using ReactiveUI;
 

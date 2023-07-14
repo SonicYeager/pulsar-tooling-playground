@@ -22,12 +22,9 @@ public sealed class MainWindowViewModel : ViewModelBase
     public ICommand ShowApi { get; }
     public ICommand TogglePane { get; }
 
-    private Control _content = new TextBlock
-    {
-        Text = "Here follows some content soon!",
-    };
+    private ViewModelBase _content = new();
 
-    public Control Content
+    public ViewModelBase Content
     {
         get => _content;
         set => this.RaiseAndSetIfChanged(ref _content, value);
@@ -42,15 +39,15 @@ public sealed class MainWindowViewModel : ViewModelBase
         TogglePane = ReactiveCommand.Create(() => { PaneState = !PaneState; });
         ShowSettings = ReactiveCommand.Create(async () =>
         {
-            var settingsView = _serviceProvider.GetRequiredService<Settings>();
-            await (settingsView.DataContext as SettingsViewModel)?.LoadAsync()!;
-            Content = settingsView;
+            var settingsViewModel = _serviceProvider.GetRequiredService<SettingsViewModel>();
+            await settingsViewModel.LoadAsync();
+            Content = settingsViewModel;
         });
         ShowApi = ReactiveCommand.Create(async () =>
         {
-            var apiView = _serviceProvider.GetRequiredService<PulsarApi>();
-            await (apiView.DataContext as PulsarApiViewModel)?.LoadAsync()!;
-            Content = apiView;
+            var pulsarApiViewModel = _serviceProvider.GetRequiredService<PulsarApiViewModel>();
+            await pulsarApiViewModel.LoadAsync();
+            Content = pulsarApiViewModel;
         });
 
         //ShowDialog = new Interaction<MusicStoreViewModel, AlbumViewModel?>();
