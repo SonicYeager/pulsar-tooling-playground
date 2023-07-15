@@ -1,9 +1,54 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using Avalonia.Controls.Notifications;
+using Avalonia.Threading;
+using Microsoft.Extensions.DependencyInjection;
+using PulsarWorker.Desktop.Models;
 
 namespace PulsarWorker.Desktop.ViewModels.Components;
 
 public sealed class ClusterViewModel : ViewModelBase
 {
-    public ObservableCollection<ViewModelBase> SubNodes { get; set; }
+    public ObservableCollection<ViewModelBase> Tenants { get; set; } = new();
     public string Name { get; set; }
+
+
+    private readonly PulsarModel _model;
+    private readonly IServiceProvider _provider;
+    private IManagedNotificationManager? _managedNotificationManager;
+
+    public ClusterViewModel(PulsarModel model)
+    {
+        _model = model;
+    }
+
+
+    public override void HandleActivation(CompositeDisposable disposable)
+    {
+        base.HandleActivation(disposable);
+        Observable.Start(() => _model.GetTenants(Notify).Result)
+            //.ObserveOn(RxApp.MainThreadScheduler) // schedule back to main scheduler only if the 'stuff to do' is on ui thread
+            .Subscribe(LoadAsync)
+            .DisposeWith(disposable);
+    }
+
+    private void LoadAsync(IEnumerable<TenantViewModel> viewModels)
+    {
+        foreach (var cluster in viewModels)
+        {
+            Tenants.Add(cluster);
+        }
+    }
+
+    private async void Notify(string title, NotificationType notificationType, string message)
+    {
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            _managedNotificationManager ??= _provider.GetRequiredService<IManagedNotificationManager>();
+            _managedNotificationManager?.Show(new Notification(title, message, notificationType));
+        }).GetTask();
+    }
 }

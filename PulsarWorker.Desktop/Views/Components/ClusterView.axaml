@@ -9,5 +9,8 @@
         <components:ClusterViewModel />
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Name}"/>
+    <StackPanel>
+        <TextBlock Text="{Binding Name}" />
+        <ItemsControl ItemsSource="{Binding Tenants}" />
+    </StackPanel>
 </UserControl>

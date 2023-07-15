@@ -51,4 +51,26 @@ public sealed class PulsarModel
 
         return clusterViewModels;
     }
+    
+    public async Task<IEnumerable<TenantViewModel>> GetTenants(Action<string, NotificationType, string> onNotify)
+    {
+        var clusterViewModels = new List<TenantViewModel>();
+
+        try
+        {
+            foreach (var clusterName in await _pulsarClient.GetTenants())
+            {
+                var clusterViewModel = _serviceProvider.GetRequiredService<TenantViewModel>();
+                clusterViewModel.Name = clusterName;
+                clusterViewModels.Add(clusterViewModel);
+            }
+        }
+        catch (Exception e)
+        {
+            onNotify("Error", NotificationType.Error, e.Message);
+            //TODO show error page upon exception -> use event
+        }
+
+        return clusterViewModels;
+    }
 }
