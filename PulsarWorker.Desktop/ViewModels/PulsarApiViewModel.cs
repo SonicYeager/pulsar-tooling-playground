@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
 using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,19 +18,20 @@ public sealed class PulsarApiViewModel : ViewModelBase
     private readonly IServiceProvider _provider;
     private IManagedNotificationManager? ManagedNotificationManager { get; set; }
 
-    public PulsarApiViewModel(PulsarModel model, IServiceProvider provider)
+    public PulsarApiViewModel(PulsarModel model, IServiceProvider provider) : base()
     {
         _model = model;
         _provider = provider;
-    }
-
-    public override void HandleActivation(CompositeDisposable disposable)
-    {
-        base.HandleActivation(disposable);
-        Observable.Start(() => _model.GetClusters(Notify).Result)
-            //.ObserveOn(RxApp.MainThreadScheduler) // schedule back to main scheduler only if the 'stuff to do' is on ui thread
-            .Subscribe(LoadAsync)
-            .DisposeWith(disposable);
+        this.WhenActivated((CompositeDisposable disposables) =>
+        {
+            Observable.Start(() => _model.GetClusters(Notify).Result)
+                //.ObserveOn(RxApp.MainThreadScheduler) // schedule back to main scheduler only if the 'stuff to do' is on ui thread
+                .Subscribe(LoadAsync)
+                .DisposeWith(disposables);
+            //Disposable
+            //    .Create(() => { /* handle deactivation */ })
+            //    .DisposeWith(disposables);
+        });
     }
 
     private void LoadAsync(IEnumerable<ClusterViewModel> viewModels)

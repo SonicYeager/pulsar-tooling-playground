@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
@@ -35,16 +36,13 @@ public sealed class MainWindowViewModel : ViewModelBase
         _serviceProvider = serviceProvider;
 
         TogglePane = ReactiveCommand.Create(() => { PaneState = !PaneState; });
-        ShowSettings = ReactiveCommand.Create(async () =>
+        ShowSettings = ReactiveCommand.Create(() =>
         {
-            var settingsViewModel = _serviceProvider.GetRequiredService<SettingsViewModel>();
-            await settingsViewModel.LoadAsync();
-            Content = settingsViewModel;
+            Content = _serviceProvider.GetRequiredService<SettingsViewModel>();
         });
         ShowApi = ReactiveCommand.Create(() =>
         {
-            var pulsarApiViewModel = _serviceProvider.GetRequiredService<PulsarApiViewModel>();
-            Content = pulsarApiViewModel;
+            Content = _serviceProvider.GetRequiredService<PulsarApiViewModel>();
         });
 
         //ShowDialog = new Interaction<MusicStoreViewModel, AlbumViewModel?>();

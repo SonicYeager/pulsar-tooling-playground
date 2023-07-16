@@ -1,31 +1,46 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
 using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using PulsarWorker.Desktop.Models;
 using PulsarWorker.Desktop.Services;
+using ReactiveUI;
 
 namespace PulsarWorker.Desktop.ViewModels;
 
 public sealed class SettingsViewModel : ViewModelBase
 {
-    private readonly SettingsModel _model;
     private readonly IServiceProvider _provider;
-    private readonly UserManager _userManager;
     private IManagedNotificationManager? ManagedNotificationManager { get; set; }
 
-    public SettingsViewModel(SettingsModel model, IServiceProvider provider, UserManager userManager)
+    public ObservableCollection<ViewModelBase> PersistedOptions { get; init; } = new();
+
+    public SettingsViewModel(SettingsModel model, IServiceProvider provider, UserManager userManager) : base()
     {
-        _model = model;
         _provider = provider;
-        _userManager = userManager;
+        this.WhenActivated((CompositeDisposable disposables) =>
+        {
+            Observable.Start(() => model.GetPersistedSettings(Notify, userManager.CurrentUserId).Result)
+                //.ObserveOn(RxApp.MainThreadScheduler) // schedule back to main scheduler only if the 'stuff to do' is on ui thread
+                .Subscribe(LoadAsync)
+                .DisposeWith(disposables);
+            //Disposable
+            //    .Create(() => { /* handle deactivation */ })
+            //    .DisposeWith(disposables);
+        });
     }
 
-    public async Task LoadAsync() //TODO look into the approach of the music store example for loading
+    public void LoadAsync(IEnumerable<ViewModelBase> persistedOptions) //TODO look into the approach of the music store example for loading
     {
-        await _model.GetPersistedSettings(PersistedOptions, async () => await Notify(), _userManager.CurrentUserId);
+        foreach (var option in persistedOptions)
+        {
+            PersistedOptions.Add(option);
+        }
     }
 
 
@@ -37,6 +52,4 @@ public sealed class SettingsViewModel : ViewModelBase
             ManagedNotificationManager?.Show(new Notification("SettingsView Saved", "", NotificationType.Success));
         }).GetTask();
     }
-
-    public ObservableCollection<ViewModelBase> PersistedOptions { get; init; } = new();
 }

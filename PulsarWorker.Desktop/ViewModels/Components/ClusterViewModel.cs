@@ -7,6 +7,7 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using PulsarWorker.Desktop.Models;
+using ReactiveUI;
 
 namespace PulsarWorker.Desktop.ViewModels.Components;
 
@@ -15,24 +16,24 @@ public sealed class ClusterViewModel : ViewModelBase
     public ObservableCollection<ViewModelBase> Tenants { get; set; } = new();
     public string Name { get; set; }
 
-
     private readonly PulsarModel _model;
     private readonly IServiceProvider _provider;
     private IManagedNotificationManager? _managedNotificationManager;
 
-    public ClusterViewModel(PulsarModel model)
+    public ClusterViewModel(PulsarModel model, IServiceProvider provider) : base()
     {
         _model = model;
-    }
-
-
-    public override void HandleActivation(CompositeDisposable disposable)
-    {
-        base.HandleActivation(disposable);
-        Observable.Start(() => _model.GetTenants(Notify).Result)
-            //.ObserveOn(RxApp.MainThreadScheduler) // schedule back to main scheduler only if the 'stuff to do' is on ui thread
-            .Subscribe(LoadAsync)
-            .DisposeWith(disposable);
+        _provider = provider;
+        this.WhenActivated((CompositeDisposable disposables) =>
+        {
+            Observable.Start(() => _model.GetTenants(Notify).Result)
+                //.ObserveOn(RxApp.MainThreadScheduler) // schedule back to main scheduler only if the 'stuff to do' is on ui thread
+                .Subscribe(LoadAsync)
+                .DisposeWith(disposables);
+            //Disposable
+            //    .Create(() => { /* handle deactivation */ })
+            //    .DisposeWith(disposables);
+        });
     }
 
     private void LoadAsync(IEnumerable<TenantViewModel> viewModels)

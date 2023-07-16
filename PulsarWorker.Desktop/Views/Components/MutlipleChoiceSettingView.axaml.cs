@@ -9,9 +9,4 @@ public sealed partial class MultipleChoiceSettingView : UserControl
     {
         InitializeComponent();
     }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
 }

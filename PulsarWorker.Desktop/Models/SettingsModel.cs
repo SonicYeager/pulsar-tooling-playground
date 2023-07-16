@@ -34,8 +34,9 @@ public sealed class SettingsModel
         };
     }
 
-    public async Task GetPersistedSettings(ObservableCollection<ViewModelBase> observableCollection, Func<Task> onSuccess, int userId)
+    public async Task<IEnumerable<ViewModelBase>> GetPersistedSettings(Func<Task> onSuccess, int userId)
     {
+        var collection = new List<ViewModelBase>();
         await using var context = Repository.Connect(_dbContextOptions);
         var settingsEntities = context.Set<SettingsEntity>().Where(s => s.UserId == userId);
         foreach (var settingsEntity in settingsEntities)
@@ -45,17 +46,19 @@ public sealed class SettingsModel
                 case AvailableSettings.PulsarHostOptionKey:
                 {
                     var textSetting = CreateTextSetting("Pulsar Host", settingsEntity.Value, onSuccess);
-                    observableCollection.Add(textSetting);
+                    collection.Add(textSetting);
                     break;
                 }
                 case AvailableSettings.AppThemeOptionKey:
                 {
                     var textSetting = CreateMultipleChoiceSetting("App Theme", ThemeChoices, settingsEntity.Value, onSuccess);
-                    observableCollection.Add(textSetting);
+                    collection.Add(textSetting);
                     break;
                 }
             }
         }
+
+        return collection;
     }
 
     private TextSettingViewModel CreateTextSetting(string requestedKey, string? value, Func<Task> onSuccess)

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
 using Microsoft.Extensions.DependencyInjection;
 using PulsarWorker.Client;
 using PulsarWorker.Desktop.Services;
-using PulsarWorker.Desktop.ViewModels;
 using PulsarWorker.Desktop.ViewModels.Components;
 
 namespace PulsarWorker.Desktop.Models;
@@ -51,7 +49,7 @@ public sealed class PulsarModel
 
         return clusterViewModels;
     }
-    
+
     public async Task<IEnumerable<TenantViewModel>> GetTenants(Action<string, NotificationType, string> onNotify)
     {
         var clusterViewModels = new List<TenantViewModel>();

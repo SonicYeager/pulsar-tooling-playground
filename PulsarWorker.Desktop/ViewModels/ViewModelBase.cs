@@ -1,17 +1,13 @@
-﻿using System;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using ReactiveUI;
+﻿using ReactiveUI;
 
 namespace PulsarWorker.Desktop.ViewModels;
 
-public class ViewModelBase : ReactiveObject
+public class ViewModelBase : ReactiveObject, IActivatableViewModel
 {
-    public virtual void HandleActivation(CompositeDisposable disposables)
+    public ViewModelBase()
     {
+        Activator = new ViewModelActivator();
     }
 
-    public virtual void HandleDeactivation()
-    {
-    }
+    public ViewModelActivator Activator { get; }
 }
