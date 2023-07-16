@@ -17,7 +17,6 @@ using PulsarWorker.Desktop.Services;
 using PulsarWorker.Desktop.ViewModels.Components;
 using PulsarWorker.Desktop.Views.Components;
 
-//TODO: introduce real async loading of data (when possible)
 namespace PulsarWorker.Desktop
 {
     public sealed class App : Application

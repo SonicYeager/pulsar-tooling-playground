@@ -25,7 +25,7 @@ public sealed class SettingsViewModel : ViewModelBase
         _provider = provider;
         this.WhenActivated((CompositeDisposable disposables) =>
         {
-            Observable.Start(() => model.GetPersistedSettings(Notify, userManager.CurrentUserId).Result)
+            Observable.StartAsync(async () => await model.GetPersistedSettings(Notify, userManager.CurrentUserId))
                 //.ObserveOn(RxApp.MainThreadScheduler) // schedule back to main scheduler only if the 'stuff to do' is on ui thread
                 .Subscribe(LoadAsync)
                 .DisposeWith(disposables);
@@ -35,7 +35,7 @@ public sealed class SettingsViewModel : ViewModelBase
         });
     }
 
-    public void LoadAsync(IEnumerable<ViewModelBase> persistedOptions) //TODO look into the approach of the music store example for loading
+    public void LoadAsync(IEnumerable<ViewModelBase> persistedOptions)
     {
         foreach (var option in persistedOptions)
         {

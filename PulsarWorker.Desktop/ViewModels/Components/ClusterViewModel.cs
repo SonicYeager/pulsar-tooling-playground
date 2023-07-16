@@ -26,7 +26,7 @@ public sealed class ClusterViewModel : ViewModelBase
         _provider = provider;
         this.WhenActivated((CompositeDisposable disposables) =>
         {
-            Observable.Start(() => _model.GetTenants(Notify).Result)
+            Observable.StartAsync(async () => await _model.GetTenants(Notify))
                 //.ObserveOn(RxApp.MainThreadScheduler) // schedule back to main scheduler only if the 'stuff to do' is on ui thread
                 .Subscribe(LoadAsync)
                 .DisposeWith(disposables);
