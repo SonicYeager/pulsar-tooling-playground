@@ -8,6 +8,11 @@ namespace PulsarWorker.Desktop;
 
 public sealed class ViewLocator : IDataTemplate
 {
+    public static bool SupportsRecycling
+    {
+        get => false;
+    }
+
     private readonly IServiceProvider _serviceProvider;
     public ViewLocator(IServiceProvider serviceProvider)
     {

@@ -34,7 +34,7 @@ public sealed class PulsarModel
 
         try
         {
-            foreach (var clusterName in await _pulsarClient.GetClusters())
+            foreach (var clusterName in (await _pulsarClient.GetClusters())!)
             {
                 var clusterViewModel = _serviceProvider.GetRequiredService<ClusterViewModel>();
                 clusterViewModel.Name = clusterName;
@@ -52,15 +52,15 @@ public sealed class PulsarModel
 
     public async Task<IEnumerable<TenantViewModel>> GetTenants(Action<string, NotificationType, string> onNotify)
     {
-        var clusterViewModels = new List<TenantViewModel>();
+        var tenantViewModels = new List<TenantViewModel>();
 
         try
         {
-            foreach (var clusterName in await _pulsarClient.GetTenants())
+            foreach (var clusterName in (await _pulsarClient.GetTenants())!)
             {
                 var clusterViewModel = _serviceProvider.GetRequiredService<TenantViewModel>();
                 clusterViewModel.Name = clusterName;
-                clusterViewModels.Add(clusterViewModel);
+                tenantViewModels.Add(clusterViewModel);
             }
         }
         catch (Exception e)
@@ -69,6 +69,51 @@ public sealed class PulsarModel
             //TODO show error page upon exception -> use event
         }
 
-        return clusterViewModels;
+        return tenantViewModels;
+    }
+
+    public async Task<IEnumerable<NameSpaceViewModel>> GetNameSpaces(string tenant, Action<string, NotificationType, string> onNotify)
+    {
+        var nameSpaces = new List<NameSpaceViewModel>();
+
+        try
+        {
+            foreach (var nameSpace in (await _pulsarClient.GetNamespaces(tenant))!)
+            {
+                var nameSpaceViewModel = _serviceProvider.GetRequiredService<NameSpaceViewModel>();
+                nameSpaceViewModel.Name = nameSpace;
+                nameSpaceViewModel.Tenant = tenant;
+                nameSpaces.Add(nameSpaceViewModel);
+            }
+        }
+        catch (Exception e)
+        {
+            onNotify("Error", NotificationType.Error, e.Message);
+            //TODO show error page upon exception -> use event
+        }
+
+        return nameSpaces;
+    }
+    public async Task<IEnumerable<TopicViewModel>> GetTopics(string tenant, string nameSpace,
+        Action<string, NotificationType, string> onNotify)
+    {
+        var nameSpaces = new List<TopicViewModel>();
+
+        try
+        {
+            foreach (var topic in (await _pulsarClient.GetTopics(tenant, nameSpace))!)
+            {
+                var topicViewModel = _serviceProvider.GetRequiredService<TopicViewModel>();
+                topicViewModel.Name = topic;
+                nameSpaces.Add(topicViewModel);
+            }
+        }
+        catch (Exception e)
+        {
+            onNotify("Error", NotificationType.Error, e.Message);
+            //TODO show error page upon exception -> use event
+        }
+
+        return nameSpaces;
     }
 }

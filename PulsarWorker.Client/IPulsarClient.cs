@@ -1,5 +1,6 @@
 ﻿namespace PulsarWorker.Client;
 
+//TODO refactor me to use REFIT!!
 public interface IPulsarClient : IDisposable
 {
     public void ChangeBaseAddress(Uri newBaseAddress);

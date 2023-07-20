@@ -14,19 +14,17 @@ namespace PulsarWorker.Desktop.ViewModels.Components;
 public sealed class ClusterViewModel : ViewModelBase
 {
     public ObservableCollection<ViewModelBase> Tenants { get; set; } = new();
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
-    private readonly PulsarModel _model;
     private readonly IServiceProvider _provider;
     private IManagedNotificationManager? _managedNotificationManager;
 
-    public ClusterViewModel(PulsarModel model, IServiceProvider provider) : base()
+    public ClusterViewModel(PulsarModel model, IServiceProvider provider)
     {
-        _model = model;
         _provider = provider;
-        this.WhenActivated((CompositeDisposable disposables) =>
+        this.WhenActivated(disposables =>
         {
-            Observable.StartAsync(async () => await _model.GetTenants(Notify))
+            Observable.StartAsync(async () => await model.GetTenants(Notify))
                 //.ObserveOn(RxApp.MainThreadScheduler) // schedule back to main scheduler only if the 'stuff to do' is on ui thread
                 .Subscribe(LoadAsync)
                 .DisposeWith(disposables);

@@ -14,7 +14,7 @@
         <PackageReference Include="DotPulsar" Version="2.11.1" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
-        <PackageReference Include="Pulsar.Client" Version="2.12.3" />
+        <PackageReference Include="Pulsar.Client" Version="2.12.4" />
     </ItemGroup>
 
     <ItemGroup>
