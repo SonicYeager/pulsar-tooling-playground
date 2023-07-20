@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Avalonia.Controls.Notifications;
+using Avalonia.Controls.Selection;
 using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using PulsarWorker.Desktop.Models;
@@ -14,17 +16,18 @@ namespace PulsarWorker.Desktop.ViewModels;
 
 public sealed class PulsarApiViewModel : ViewModelBase
 {
-    private readonly PulsarModel _model;
+    public ObservableCollection<ViewModelBase> Clusters { get; init; } = new();
+    public ISelectionModel Selection { get; init; } = new SelectionModel<ViewModelBase>();
+
     private readonly IServiceProvider _provider;
     private IManagedNotificationManager? ManagedNotificationManager { get; set; }
 
-    public PulsarApiViewModel(PulsarModel model, IServiceProvider provider) : base()
+    public PulsarApiViewModel(PulsarModel model, IServiceProvider provider)
     {
-        _model = model;
         _provider = provider;
-        this.WhenActivated((CompositeDisposable disposables) =>
+        this.WhenActivated(disposables =>
         {
-            Observable.StartAsync(async () => await _model.GetClusters(Notify))
+            Observable.StartAsync(async () => await model.GetClusters(Notify))
                 //.ObserveOn(RxApp.MainThreadScheduler) // schedule back to main scheduler only if the 'stuff to do' is on ui thread
                 .Subscribe(LoadAsync)
                 .DisposeWith(disposables);
@@ -32,6 +35,16 @@ public sealed class PulsarApiViewModel : ViewModelBase
             //    .Create(() => { /* handle deactivation */ })
             //    .DisposeWith(disposables);
         });
+        Selection.SelectionChanged += ChangeAndExpand;
+    }
+
+    private void ChangeAndExpand(object? self, SelectionModelSelectionChangedEventArgs args)
+    {
+        var found = Clusters.First(c => c == args.SelectedItems.Single() as ViewModelBase);
+        if (found == (self as SelectionModel<ViewModelBase>)?.SelectedItem)
+        {
+            Console.WriteLine("xD"); //TODO invoke expansion
+        }
     }
 
     private void LoadAsync(IEnumerable<ClusterViewModel> viewModels)
@@ -50,7 +63,4 @@ public sealed class PulsarApiViewModel : ViewModelBase
             ManagedNotificationManager?.Show(new Notification(title, message, notificationType));
         }).GetTask();
     }
-
-    public ObservableCollection<ViewModelBase> Clusters { get; init; } = new();
-
 }

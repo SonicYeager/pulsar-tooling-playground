@@ -20,10 +20,10 @@ public sealed class SettingsViewModel : ViewModelBase
 
     public ObservableCollection<ViewModelBase> PersistedOptions { get; init; } = new();
 
-    public SettingsViewModel(SettingsModel model, IServiceProvider provider, UserManager userManager) : base()
+    public SettingsViewModel(SettingsModel model, IServiceProvider provider, UserManager userManager)
     {
         _provider = provider;
-        this.WhenActivated((CompositeDisposable disposables) =>
+        this.WhenActivated(disposables =>
         {
             Observable.StartAsync(async () => await model.GetPersistedSettings(Notify, userManager.CurrentUserId))
                 //.ObserveOn(RxApp.MainThreadScheduler) // schedule back to main scheduler only if the 'stuff to do' is on ui thread

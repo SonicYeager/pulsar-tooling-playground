@@ -18,8 +18,10 @@
                        FontWeight="Bold"
                        Margin="0,0,0,5" />
 
-            <!-- TODO add cluster node list -->
-            <ItemsControl ItemsSource="{Binding Clusters}"/>
+            <ListBox 
+                ItemsSource="{Binding Clusters}"
+                Selection="{Binding Selection, Mode=TwoWay}"
+                SelectionMode="Toggle, Single"/>
 
         </StackPanel>
 
