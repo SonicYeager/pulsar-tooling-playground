@@ -27,42 +27,49 @@
                    VerticalAlignment="Stretch"
                    Name="SplitViewMenu">
             <SplitView.Pane>
-                <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" RowDefinitions="30,Auto,Auto,Auto">
+                <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" RowDefinitions="25,30,30">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" MinWidth="30" MaxWidth="150" />
                     </Grid.ColumnDefinitions>
                     <Button Name="PaneButton"
                             VerticalAlignment="Stretch"
                             HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
                             Command="{Binding TogglePane}"
-                            Grid.Row="0" Grid.Column="1">
-                        <PathIcon Margin="0,0,0,0"
-                                  Data="{StaticResource HamburgerIcon}"
-                                  HorizontalAlignment="Left">
-                        </PathIcon>
+                            Grid.Row="0" Grid.Column="1"
+                            Theme="{DynamicResource BorderlessButton}">
+                        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Left">
+                            <PathIcon Margin="0"
+                                      Data="{StaticResource HamburgerIcon}">
+                            </PathIcon>
+                        </StackPanel>
                     </Button>
                     <Button Name="SettingsButton"
                             VerticalAlignment="Stretch"
                             HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
                             Command="{Binding ShowSettings}"
-                            Grid.Row="1" Grid.Column="1">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Margin="0,0,0,0"
+                            Grid.Row="1" Grid.Column="1"
+                            Theme="{DynamicResource BorderlessButton}">
+                        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Left">
+                            <PathIcon Margin="0"
                                       Data="{StaticResource SettingsIcon}">
                             </PathIcon>
-                            <TextBlock IsVisible="{Binding PaneState}">SettingsView</TextBlock>
+                            <TextBlock IsVisible="{Binding PaneState}" VerticalAlignment="Center">SettingsView</TextBlock>
                         </StackPanel>
                     </Button>
                     <Button Name="ApiButton"
                             VerticalAlignment="Stretch"
                             HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
                             Command="{Binding ShowApi}"
-                            Grid.Row="2" Grid.Column="1">
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <PathIcon Margin="0,0,0,0"
-                                      Data="{StaticResource ListIcon}">
+                            Grid.Row="2" Grid.Column="1"
+                            Theme="{DynamicResource BorderlessButton}">
+                        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Left">
+                            <PathIcon Margin="0"
+                                      Data="{StaticResource ApiIcon}">
                             </PathIcon>
-                            <TextBlock IsVisible="{Binding PaneState}">Api</TextBlock>
+                            <TextBlock IsVisible="{Binding PaneState}" VerticalAlignment="Center">Api</TextBlock>
                         </StackPanel>
                     </Button>
                 </Grid>

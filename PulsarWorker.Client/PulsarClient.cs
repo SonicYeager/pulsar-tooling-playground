@@ -29,12 +29,12 @@ public sealed class PulsarClient : IPulsarClient
         return await GetResourcesAsync(new("/admin/v2/tenants", UriKind.Relative));
     }
 
-    public async Task<IEnumerable<string>?> GetNamespaces(string tenant)
+    public async Task<IEnumerable<string>?> GetNamespaces(string? tenant)
     {
         return await GetResourcesAsync(new($"/admin/v2/namespaces/{tenant}", UriKind.Relative));
     }
 
-    public async Task<IEnumerable<string>?> GetTopics(string tenant, string pulsarNamespace)
+    public async Task<IEnumerable<string>?> GetTopics(string? tenant, string? pulsarNamespace)
     {
         return await GetResourcesAsync(new($"/persistent/{tenant}/{pulsarNamespace}", UriKind.Relative));
     }

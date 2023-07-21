@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using Avalonia.ReactiveUI;
+﻿using Avalonia.ReactiveUI;
 using PulsarWorker.Desktop.ViewModels;
 
 namespace PulsarWorker.Desktop.Views;

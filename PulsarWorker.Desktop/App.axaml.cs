@@ -14,7 +14,6 @@ using PulsarWorker.Database.Context;
 using PulsarWorker.Database.Extensions;
 using PulsarWorker.Desktop.Models;
 using PulsarWorker.Desktop.Services;
-using PulsarWorker.Desktop.ViewModels.Components;
 using PulsarWorker.Desktop.Views.Components;
 
 namespace PulsarWorker.Desktop
@@ -60,14 +59,6 @@ namespace PulsarWorker.Desktop
             Services.AddTransient<MainWindowViewModel>();
             Services.AddTransient<PulsarApiViewModel>();
             Services.AddTransient<SettingsViewModel>();
-            Services.AddTransient<ClusterViewModel>();
-            Services.AddTransient<NameSpaceViewModel>();
-            Services.AddTransient<TenantViewModel>();
-            Services.AddTransient<TopicViewModel>();
-            Services.AddTransient<ClusterView>();
-            Services.AddTransient<NameSpaceView>();
-            Services.AddTransient<TenantView>();
-            Services.AddTransient<TopicView>();
             Services.AddTransient<MultipleChoiceSettingView>();
             Services.AddTransient<TextSettingView>();
             Services.AddTransient<SettingsView>();

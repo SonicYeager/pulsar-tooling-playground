@@ -9,30 +9,23 @@
     <Design.DataContext>
         <viewModels:PulsarApiViewModel />
     </Design.DataContext>
+    
+    <StackPanel>
+        <TextBlock Text="PulsarNodes"
+                   FontSize="40"
+                   FontWeight="Bold"
+                   Margin="0,0,0,5" />
 
-    <Grid ColumnDefinitions="2*,3*">
 
-        <StackPanel>
-            <TextBlock Text="PulsarNodes"
-                       FontSize="40"
-                       FontWeight="Bold"
-                       Margin="0,0,0,5" />
+        <TabStrip ItemsSource="{Binding Clusters}"
+                  SelectedItem="{Binding SelectedCluster}"/>
+        <TabStrip ItemsSource="{Binding Tenants}" 
+                  SelectedItem="{Binding SelectedTenant}"/>
+        <TabStrip ItemsSource="{Binding NameSpaces}"
+                  SelectedItem="{Binding SelectedNameSpace}"/>
+        <TabStrip ItemsSource="{Binding Topics}" 
+                  SelectedItem="{Binding SelectedTopic}"/>
 
-            <ItemsControl ItemsSource="{Binding Clusters}"/>
-
-        </StackPanel>
-
-        <StackPanel Grid.Column="1"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
-            <TextBlock Text="Metrics Page coming soon..."
-                       FontSize="16"
-                       FontWeight="Bold"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Margin="10" />
-            <!-- TODO add metrics via LiveCharts2 -->
-        </StackPanel>
-    </Grid>
+    </StackPanel>
 
 </UserControl>

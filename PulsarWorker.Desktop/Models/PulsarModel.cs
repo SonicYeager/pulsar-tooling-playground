@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
-using Microsoft.Extensions.DependencyInjection;
 using PulsarWorker.Client;
 using PulsarWorker.Desktop.Services;
-using PulsarWorker.Desktop.ViewModels;
-using PulsarWorker.Desktop.ViewModels.Components;
 
 namespace PulsarWorker.Desktop.Models;
 
@@ -30,70 +26,43 @@ public sealed class PulsarModel
         };
     }
 
-    public async Task<IEnumerable<ClusterViewModel>> GetClusters(Action<string, NotificationType, string> onNotify)
+    public async Task<IEnumerable<string>> GetClusters(Action<string, NotificationType, string> onNotify)
     {
-        return await HandleResponse<ClusterViewModel>(
+        return await HandleResponse(
             async () => await _pulsarClient.GetClusters(),
-            node =>
-            {
-                var clusterViewModel = _serviceProvider.GetRequiredService<ClusterViewModel>();
-                clusterViewModel.Name = node;
-                return clusterViewModel;
-            },
             onNotify);
     }
 
-    public async Task<IEnumerable<TenantViewModel>> GetTenants(Action<string, NotificationType, string> onNotify)
+    public async Task<IEnumerable<string>> GetTenants(Action<string, NotificationType, string> onNotify)
     {
-        return await HandleResponse<TenantViewModel>(
+        return await HandleResponse(
             async () => await _pulsarClient.GetTenants(),
-            node =>
-            {
-                var tenantViewModel = _serviceProvider.GetRequiredService<TenantViewModel>();
-                tenantViewModel.Name = node;
-                return tenantViewModel;
-            },
             onNotify);
     }
 
-    public async Task<IEnumerable<NameSpaceViewModel>> GetNameSpaces(string tenant, Action<string, NotificationType, string> onNotify)
+    public async Task<IEnumerable<string>> GetNameSpaces(string? tenant, Action<string, NotificationType, string> onNotify)
     {
-        return await HandleResponse<NameSpaceViewModel>(
+        return await HandleResponse(
             async () => await _pulsarClient.GetNamespaces(tenant),
-            node =>
-            {
-                var nameSpaceViewModel = _serviceProvider.GetRequiredService<NameSpaceViewModel>();
-                nameSpaceViewModel.Name = node;
-                nameSpaceViewModel.Tenant = tenant;
-                return nameSpaceViewModel;
-            },
             onNotify);
     }
-    public async Task<IEnumerable<TopicViewModel>> GetTopics(string tenant, string nameSpace,
+    public async Task<IEnumerable<string>> GetTopics(string? tenant, string? nameSpace,
         Action<string, NotificationType, string> onNotify)
     {
-        return await HandleResponse<TopicViewModel>(
+        return await HandleResponse(
             async () => await _pulsarClient.GetTopics(tenant, nameSpace),
-            node =>
-            {
-                var topicViewModel = _serviceProvider.GetRequiredService<TopicViewModel>();
-                topicViewModel.Name = node;
-                return topicViewModel;
-            },
             onNotify);
     }
 
-    private static async Task<IEnumerable<TViewModel>> HandleResponse<TViewModel>(
+    private static async Task<IEnumerable<string>> HandleResponse(
         Func<Task<IEnumerable<string>?>> fetchFromApi,
-        Func<string, TViewModel> viewModelFactory,
         Action<string, NotificationType, string> onNotify)
-        where TViewModel : ViewModelBase
     {
-        var viewModels = new List<TViewModel>();
+        var viewModels = new List<string>();
 
         try
         {
-            viewModels.AddRange((await fetchFromApi())!.Select(viewModelFactory));
+            viewModels.AddRange(await fetchFromApi());
         }
         catch (Exception e)
         {
