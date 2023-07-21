@@ -17,7 +17,6 @@ namespace PulsarWorker.Desktop.ViewModels;
 public sealed class PulsarApiViewModel : ViewModelBase
 {
     public ObservableCollection<ViewModelBase> Clusters { get; init; } = new();
-    public ISelectionModel Selection { get; init; } = new SelectionModel<ViewModelBase>();
 
     private readonly IServiceProvider _provider;
     private IManagedNotificationManager? ManagedNotificationManager { get; set; }
@@ -35,16 +34,6 @@ public sealed class PulsarApiViewModel : ViewModelBase
             //    .Create(() => { /* handle deactivation */ })
             //    .DisposeWith(disposables);
         });
-        Selection.SelectionChanged += ChangeAndExpand;
-    }
-
-    private void ChangeAndExpand(object? self, SelectionModelSelectionChangedEventArgs args)
-    {
-        var found = Clusters.First(c => c == args.SelectedItems.Single() as ViewModelBase);
-        if (found == (self as SelectionModel<ViewModelBase>)?.SelectedItem)
-        {
-            Console.WriteLine("xD"); //TODO invoke expansion
-        }
     }
 
     private void LoadAsync(IEnumerable<ClusterViewModel> viewModels)

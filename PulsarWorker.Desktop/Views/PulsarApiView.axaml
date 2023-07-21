@@ -14,14 +14,11 @@
 
         <StackPanel>
             <TextBlock Text="PulsarNodes"
-                       FontSize="18"
+                       FontSize="40"
                        FontWeight="Bold"
                        Margin="0,0,0,5" />
 
-            <ListBox 
-                ItemsSource="{Binding Clusters}"
-                Selection="{Binding Selection, Mode=TwoWay}"
-                SelectionMode="Toggle, Single"/>
+            <ItemsControl ItemsSource="{Binding Clusters}"/>
 
         </StackPanel>
 

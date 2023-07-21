@@ -9,8 +9,17 @@
         <components:ClusterViewModel />
     </Design.DataContext>
 
-    <StackPanel>
-        <TextBlock Text="{Binding Name}" />
-        <ItemsControl ItemsSource="{Binding Tenants}" />
-    </StackPanel>
+    <Border BorderBrush="WhiteSmoke"
+            BorderThickness="1"
+            CornerRadius="3"
+            Background="#333333">
+        <StackPanel Margin="2">
+            <TextBlock Text="{Binding Name}" FontSize="30" FontWeight="Bold" />
+            <TextBlock Text="Type: Cluster" FontSize="20" FontStyle="Italic" FontWeight="Light"
+                       FontStretch="SemiExpanded" Padding="10, 2,2,2" />
+            <Expander Header="Tenants" HorizontalAlignment="Stretch">
+                <ItemsControl ItemsSource="{Binding Tenants}" />
+            </Expander>
+        </StackPanel>
+    </Border>
 </UserControl>
