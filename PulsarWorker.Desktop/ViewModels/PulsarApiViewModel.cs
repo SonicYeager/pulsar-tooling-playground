@@ -62,21 +62,36 @@ public sealed class PulsarApiViewModel : ViewModelBase
                 .Subscribe(LoadClusters)
                 .DisposeWith(disposables);
 
-            Observable.StartAsync(async () => await model.GetTenants(Notify))
-                //.ObserveOn(RxApp.MainThreadScheduler) // schedule back to main scheduler only if the 'stuff to do' is on ui thread
-                .Subscribe(LoadTenants)
-                .DisposeWith(disposables);
-
             //Disposable
             //    .Create(() => { /* handle deactivation */ })
             //    .DisposeWith(disposables);
         });
+
+        this.WhenAnyValue(static t => t.SelectedCluster)
+            .SelectMany(async x =>
+            {
+                if (!string.IsNullOrEmpty(x))
+                {
+                    Topics.Clear();
+                    SelectedTopic = string.Empty;
+                    NameSpaces.Clear();
+                    SelectedNameSpace = string.Empty;
+                    Tenants.Clear();
+                    SelectedTenant = string.Empty;
+                    return await _model.GetTenants(Notify);
+                }
+
+                return default!;
+            })
+            .Subscribe(LoadTenants);
 
         this.WhenAnyValue(static t => t.SelectedTenant)
             .SelectMany(async x =>
             {
                 if (!string.IsNullOrEmpty(x))
                 {
+                    Topics.Clear();
+                    SelectedTopic = string.Empty;
                     NameSpaces.Clear();
                     SelectedNameSpace = string.Empty;
                     return await _model.GetNameSpaces(x, Notify);
@@ -85,6 +100,7 @@ public sealed class PulsarApiViewModel : ViewModelBase
                 return default!;
             })
             .Subscribe(LoadNameSpaces);
+
         this.WhenAnyValue(static t => t.SelectedNameSpace, static t => t.SelectedTenant)
             .SelectMany(async props =>
             {
@@ -100,20 +116,16 @@ public sealed class PulsarApiViewModel : ViewModelBase
             .Subscribe(LoadTopics);
     }
 
-    private void LoadClusters(IEnumerable<string> clusters)
+    private void LoadClusters(IEnumerable<string>? clusters)
     {
-        foreach (var cluster in clusters)
-        {
-            Clusters.Add(cluster);
-        }
+        if (clusters != null)
+            Clusters.AddRange(clusters);
     }
 
-    private void LoadTenants(IEnumerable<string> tenants)
+    private void LoadTenants(IEnumerable<string>? tenants)
     {
-        foreach (var tenant in tenants)
-        {
-            Tenants.Add(tenant);
-        }
+        if (tenants != null)
+            Tenants.AddRange(tenants);
     }
 
     private void LoadNameSpaces(IEnumerable<string>? nameSpaces)
